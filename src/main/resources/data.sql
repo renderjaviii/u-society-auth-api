@@ -3,7 +3,6 @@ INSERT INTO authenticationConfig(name, value) VALUES ('config.access-token.valid
 INSERT INTO authenticationConfig(name, value) VALUES ('config.grant.types', 'password,client_credentials,refresh_token');
 INSERT INTO authenticationConfig(name, value) VALUES ('config.refresh-token.validity-seconds', '86400');
 INSERT INTO authenticationConfig(name, value) VALUES ('config.scope', 'WEB');
-INSERT INTO authenticationConfig (name, value) VALUES('config.otp-expiry-time', '1');
 
 INSERT INTO `role`(id, description, name) VALUES (1, 'Super user.', 'ROLE_ADMIN');
 INSERT INTO `role`(id, description, name) VALUES (2, 'Standard user.', 'ROLE_USER');
