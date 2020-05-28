@@ -1,0 +1,27 @@
+version: "3.7"
+services:
+  db:
+    container_name: "company_database"
+    environment:
+      MYSQL_ROOT_PASSWORD: "Password123"
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_DATABASE: "company_db"
+    image: "mysql/mysql-server:5.7.25"
+    networks:
+      - default
+    ports:
+      - "3307:3306"
+    volumes:
+      - "db-data:/var/lib/mysql"
+
+      # Manager schemas and data
+      - "./schema.sql:/docker-entrypoint-initdb.d/1-schema.sql"
+      - "./data.sql:/docker-entrypoint-initdb.d/2-data.sql"
+
+networks: 
+  default:
+    name: "company-database-network"
+
+volumes:
+  db-data:
+    name: "company-database-db-data"
