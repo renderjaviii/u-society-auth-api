@@ -100,7 +100,7 @@ public class UserControllerTest {
 
     @Test
     public void shouldGetUserUsingTheCorrectData() throws Exception {
-        when(userService.get(userName)).thenReturn(user);
+        when(userService.get(username, documentNumber, email, userName)).thenReturn(user);
 
         MvcResult mvcResult = mockMvc.perform(get(BASE_URL + "/" + userName)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -111,12 +111,12 @@ public class UserControllerTest {
         objectMapper.writeValueAsString(userResponse);
 
         assertEquals(user, userResponse);
-        verify(userService).get(userName);
+        verify(userService).get(username, documentNumber, email, userName);
     }
 
     @Test
     public void shouldThrowExceptionGettingUserIfNotExists() throws Exception {
-        when(userService.get(userName)).thenThrow(new GenericException("User not exists.", "USER_NOT_EXISTS"));
+        when(userService.get(username, documentNumber, email, userName)).thenThrow(new GenericException("User not exists.", "USER_NOT_EXISTS"));
 
         MvcResult mvcResult = mockMvc.perform(get(BASE_URL + "/" + userName)
                 .contentType(MediaType.APPLICATION_JSON))

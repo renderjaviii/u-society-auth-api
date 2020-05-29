@@ -9,13 +9,10 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import common.authentication.app.api.UserApi;
 import common.authentication.app.rest.request.CreateUserRequest;
-import common.authentication.app.rest.response.CreateUserResponse;
 import common.authentication.domain.converter.Converter;
 import common.authentication.domain.exception.GenericException;
 import common.authentication.domain.model.Role;
@@ -52,10 +49,10 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public CreateUserResponse create(CreateUserRequest request) throws GenericException {
+    public UserApi create(CreateUserRequest request) throws GenericException {
         validateUser(request);
 
-        userRepository.save(User.newBuilder()
+        User savedUser = userRepository.save(User.newBuilder()
                 .password(passwordManager.encode(request.getPassword()))
                 .username(request.getUsername())
                 .phoneNumber(request.getPhoneNumber())
@@ -69,28 +66,15 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
                 .role(buildUserRoles(request))
                 .build());
 
-        return new CreateUserResponse();
-    }
-
-    private void validateUser(CreateUserRequest request) throws GenericException {
-        if (userRepository.findByUsernameOrDocumentNumber(request.getUsername(), request.getDocumentNumber())
-                .isPresent()) {
-            throw new GenericException(String.format(USER_ALREADY_EXISTS_FORMAT,
-                    request.getUsername(), request.getDocumentNumber()), "USER_ALREADY_EXISTS");
-        }
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new GenericException(String.format(EMAIL_ALREADY_IN_USE, request.getEmail()), "EMAIL_ALREADY_IN_USE");
-        }
+        return Converter.user(savedUser);
     }
 
     @Override
-    public Authentication getTokenInfo() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    @Override
-    public UserApi get(String username) throws GenericException {
-        return Converter.user(getUser(username));
+    public UserApi get(String username, String documentNumber, String email, String phoneNumber)
+            throws GenericException {
+        return Converter.user(userRepository
+                .findByUsernameOrDocumentNumberOrEmailOrPhoneNumber(username, documentNumber, email, phoneNumber)
+                .orElseThrow(() -> new GenericException("No user match using these filters.", "USER_NOT_FOUND")));
     }
 
     @Override
@@ -100,10 +84,19 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    private void validateUser(CreateUserRequest request) throws GenericException {
+        if (userRepository.findByUsernameOrDocumentNumber(request.getUsername(), request.getDocumentNumber()).isPresent()) {
+            throw new GenericException(String.format(USER_ALREADY_EXISTS_FORMAT, request.getUsername(), request.getDocumentNumber()), "USER_ALREADY_EXISTS");
+        }
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new GenericException(String.format(EMAIL_ALREADY_IN_USE, request.getEmail()), "EMAIL_ALREADY_IN_USE");
+        }
+    }
+
     private Role buildUserRoles(CreateUserRequest request) throws GenericException {
-        return roleRepository.findByName(request.getUserRole().replaceFirst("", "ROLE_"))
-                .orElseThrow(() -> new GenericException(String.format(ROLE_ERROR_FORMAT, request.getUserRole()),
-                        "INVALID_ROLE"));
+        String role = request.getUserRole().replaceFirst("", "ROLE_");
+        return roleRepository.findByName(role)
+                .orElseThrow(() -> new GenericException(String.format(ROLE_ERROR_FORMAT, request.getUserRole()), "INVALID_ROLE"));
     }
 
 }

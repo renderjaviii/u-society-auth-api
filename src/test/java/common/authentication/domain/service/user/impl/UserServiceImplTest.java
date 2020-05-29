@@ -42,7 +42,7 @@ public class UserServiceImplTest {
     public void shouldGetUserUsingTheCorrectData() throws GenericException {
         when(userRepository.getOne(any())).thenReturn(user);
 
-        UserApi executed = subject.get(userName);
+        UserApi executed = subject.get(username, documentNumber, email, userName);
         assertEquals(Converter.user(user), executed);
         verify(userRepository).findByUsername(userName);
     }

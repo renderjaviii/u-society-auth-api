@@ -10,12 +10,15 @@ import common.authentication.domain.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUsername(String username);
-
-    Optional<User> findByPhoneNumber(String phoneNumber);
-
     Optional<User> findByUsernameOrDocumentNumber(String userName, String documentNumber);
 
+    Optional<User> findByUsername(String username);
+
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByUsernameOrDocumentNumberOrEmailOrPhoneNumber(String username,
+                                                                  String documentNumber,
+                                                                  String email,
+                                                                  String phoneNumber);
 
 }
