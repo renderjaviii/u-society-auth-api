@@ -2,10 +2,11 @@ package common.authentication.app.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import common.authentication.app.util.BaseObject;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "Api Error")
-public class ApiError extends GenericApi {
+public class ApiError extends BaseObject {
 
     @JsonProperty
     private String description;

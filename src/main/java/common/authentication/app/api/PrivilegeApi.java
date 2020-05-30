@@ -3,11 +3,12 @@ package common.authentication.app.api;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import common.authentication.app.util.BaseObject;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "Privilege Api")
 @JsonRootName(value = "privilege")
-public class PrivilegeApi extends GenericApi {
+public class PrivilegeApi extends BaseObject {
 
     @JsonProperty
     private Integer id;

@@ -5,11 +5,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import common.authentication.app.util.BaseObject;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "Role Api")
 @JsonRootName(value = "role")
-public class RoleApi extends GenericApi {
+public class RoleApi extends BaseObject {
 
     @JsonProperty
     private Integer id;

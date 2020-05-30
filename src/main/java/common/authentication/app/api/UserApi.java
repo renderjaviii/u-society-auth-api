@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+import common.authentication.app.util.BaseObject;
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "User Api")
 @JsonRootName(value = "user")
-public class UserApi extends GenericApi {
+public class UserApi extends BaseObject {
 
     @JsonProperty
     private String username;

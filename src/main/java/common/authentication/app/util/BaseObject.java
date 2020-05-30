@@ -1,10 +1,10 @@
-package common.authentication.app.api;
+package common.authentication.app.util;
 
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 
-public class GenericApi {
+public class BaseObject {
 
     @Override
     public boolean equals(Object obj)
