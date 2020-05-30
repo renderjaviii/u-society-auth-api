@@ -7,6 +7,8 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -91,6 +93,13 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND));
         user.setAccountLocked(TRUE);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<UserApi> getAll() {
+        return userRepository.findAll().stream()
+                .map(Converter::user)
+                .collect(Collectors.toList());
     }
 
     private void validateUser(CreateUserRequest request) throws UserException {

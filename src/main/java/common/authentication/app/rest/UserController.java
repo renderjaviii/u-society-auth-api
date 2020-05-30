@@ -2,6 +2,8 @@ package common.authentication.app.rest;
 
 import static org.springframework.http.HttpStatus.CREATED;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +91,15 @@ public class UserController extends CommonController {
     public ResponseEntity<Void> delete(@PathVariable(value = "username") final String username) throws UserException {
         userService.delete(username);
         return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "Get all users.")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Users data."),
+            @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
+    @GetMapping(path = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserApi>> get() {
+        return ResponseEntity.ok(userService.getAll());
     }
 
 }

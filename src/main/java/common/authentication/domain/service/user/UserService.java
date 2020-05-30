@@ -1,5 +1,7 @@
 package common.authentication.domain.service.user;
 
+import java.util.List;
+
 import common.authentication.app.api.UserApi;
 import common.authentication.app.rest.request.CreateUserRequest;
 import common.authentication.domain.exception.GenericException;
@@ -16,5 +18,7 @@ public interface UserService {
     void enableAccount(String username) throws GenericException;
 
     void delete(String username) throws UserException;
+
+    List<UserApi> getAll();
 
 }
