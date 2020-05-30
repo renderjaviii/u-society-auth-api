@@ -1,11 +1,10 @@
 package common.authentication.app.handler;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,15 +28,14 @@ import common.authentication.domain.exception.UserValidationException;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String BAD_REQUEST = "BAD_REQUEST";
+    private static final String BASIC_FORMAT = "%s %s";
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-
-        String errorMessage = "Malformed json request: ";
-        errorMessage = errorMessage.concat(ex.getCause().getMessage());
+        String errorMessage = String.format(BASIC_FORMAT, "Malformed json request:", ex.getCause().getMessage());
         return new ResponseEntity<>(new ApiError(errorMessage, BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
@@ -46,22 +44,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-        StringJoiner line = new StringJoiner(", ");
+        StringJoiner s = new StringJoiner(", ");
         ex.getBindingResult().getAllErrors()
-                .forEach(error -> line.add(((FieldError) error).getField() + " " + error.getDefaultMessage()));
+                .forEach(error -> s.add(String.format(BASIC_FORMAT, ((FieldError) error).getField(),
+                        error.getDefaultMessage())));
 
-        String errorMessage = "Fields validation failed: " + line.toString();
+        String errorMessage = String.format(BASIC_FORMAT, "Fields validation failed:", s.toString());
         return new ResponseEntity<>(new ApiError(errorMessage, BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler( { ConstraintViolationException.class })
     public ResponseEntity<Object> handleConstraintViolation(
             ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new LinkedList<>();
-        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            errors.add(violation.getRootBeanClass().getName() + " " +
-                    violation.getPropertyPath() + ": " + violation.getMessage());
-        }
+        List<String> errors = ex.getConstraintViolations().stream()
+                .map(violation -> String.format("%s %s: %s",
+                        violation.getRootBeanClass().getName(),
+                        violation.getPropertyPath(),
+                        violation.getMessage()))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(new ApiError(errors.toString(), "CONSTRAINT_VIOLATION_ERROR"),
                 HttpStatus.NOT_ACCEPTABLE);
@@ -71,7 +71,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ApiError> handleDataIntegrityViolation(HttpServletRequest req,
                                                                  DataIntegrityViolationException e) {
 
-        String errorMessage = "SQL exception: " + e.getCause().getMessage();
+        String errorMessage = String.format(BASIC_FORMAT, "SQL exception:", e.getCause().getMessage());
         return new ResponseEntity<>(new ApiError(errorMessage, "SQL_INTEGRITY_ERROR"), HttpStatus.CONFLICT);
     }
 
@@ -93,9 +93,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiError(ex.getMessage(), ex.getErrorCode()), HttpStatus.FORBIDDEN);
     }
 
-  /*  @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiError> handleGlobal(Exception ex) {
-        return new ResponseEntity<>(new ApiError(ex.getMessage(), "INTERNAL_SERVER_ERROR"), INTERNAL_SERVER_ERROR);
-    }
-*/
 }
