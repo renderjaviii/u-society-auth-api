@@ -12,6 +12,6 @@ public interface UserService {
 
     UserApi get(String username, String documentNumber, String email, String phoneNumber) throws GenericException;
 
-    void enableAccount(String username, String otpCode) throws GenericException;
+    void enableAccount(String username) throws GenericException;
 
 }

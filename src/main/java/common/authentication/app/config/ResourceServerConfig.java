@@ -17,7 +17,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and().cors()
                 .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/v1/**").authenticated();
+                .antMatchers("/oauth/check_token").authenticated();
     }
 
 }
