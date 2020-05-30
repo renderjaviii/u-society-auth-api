@@ -1,15 +1,11 @@
 package common.authentication.app.api;
 
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
-import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 
 @ApiModel(value = "Api Error")
-public class ApiError {
+public class ApiError extends GenericApi {
 
     @JsonProperty
     private String description;
@@ -39,18 +35,13 @@ public class ApiError {
     }
 
     @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
-    }
-
-    @Override
     public boolean equals(Object o) {
-        return reflectionEquals(this, o);
+        return super.equals(o);
     }
 
     @Override
-    public String toString() {
-        return reflectionToString(this);
+    public int hashCode() {
+        return super.hashCode();
     }
 
     public static Builder newBuilder() {

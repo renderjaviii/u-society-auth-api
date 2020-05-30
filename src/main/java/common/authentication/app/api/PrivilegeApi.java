@@ -1,37 +1,28 @@
-package common.authentication.domain.model;
+package common.authentication.app.api;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-import java.util.Objects;
+import io.swagger.annotations.ApiModel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+@ApiModel(value = "Privilege Api")
+@JsonRootName(value = "privilege")
+public class PrivilegeApi extends GenericApi {
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
-@Entity
-@Table(name = "privilege")
-public class Privilege {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty
     private Integer id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @JsonProperty
     private String name;
 
-    @Column(name = "description")
+    @JsonProperty
     private String description;
 
-    public Privilege() {
+    public PrivilegeApi() {
         super();
     }
 
-    private Privilege(Builder builder) {
+    private PrivilegeApi(Builder builder) {
         id = builder.id;
         name = builder.name;
         description = builder.description;
@@ -63,24 +54,12 @@ public class Privilege {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Privilege)) {
-            return false;
-        }
-        Privilege that = (Privilege) o;
-        return id.equals(that.id);
+        return super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return super.hashCode();
     }
 
     public static Builder newBuilder() {
@@ -94,6 +73,7 @@ public class Privilege {
         private String description;
 
         private Builder() {
+            super();
         }
 
         public Builder id(Integer id) {
@@ -111,8 +91,8 @@ public class Privilege {
             return this;
         }
 
-        public Privilege build() {
-            return new Privilege(this);
+        public PrivilegeApi build() {
+            return new PrivilegeApi(this);
         }
 
     }

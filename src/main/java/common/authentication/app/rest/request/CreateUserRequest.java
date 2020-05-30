@@ -2,6 +2,7 @@ package common.authentication.app.rest.request;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -55,6 +56,7 @@ public class CreateUserRequest {
     private String documentNumber;
 
     @ApiModelProperty(notes = "Email", required = true)
+    @Email
     @NotBlank
     @JsonProperty(value = "email")
     private String email;

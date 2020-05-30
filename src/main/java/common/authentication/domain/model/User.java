@@ -73,12 +73,8 @@ public class User {
         super();
     }
 
-    public User(User user) {
-        this.accountLocked = user.accountLocked;
-        this.role = user.role;
-    }
-
-    private User(Builder builder) {
+    public User(Builder builder) {
+        id = builder.id;
         username = builder.username;
         password = builder.password;
         firstName = builder.firstName;
@@ -90,6 +86,8 @@ public class User {
         phoneNumber = builder.phoneNumber;
         createdAt = builder.createdAt;
         lastAccessAt = builder.lastAccessAt;
+        accountLocked = builder.accountLocked;
+        emailVerified = builder.emailVerified;
         role = builder.role;
     }
 
@@ -153,6 +151,10 @@ public class User {
         return accountLocked;
     }
 
+    public void setAccountLocked(boolean accountLocked) {
+        this.accountLocked = accountLocked;
+    }
+
     public boolean isEmailVerified() {
         return emailVerified;
     }
@@ -163,6 +165,10 @@ public class User {
 
     public Role getRole() {
         return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -189,6 +195,7 @@ public class User {
 
     public static final class Builder {
 
+        private Long id;
         private String username;
         private String password;
         private String firstName;
@@ -200,10 +207,17 @@ public class User {
         private String phoneNumber;
         private LocalDate createdAt;
         private LocalDateTime lastAccessAt;
+        private boolean accountLocked;
+        private boolean emailVerified;
         private Role role;
 
         private Builder() {
             super();
+        }
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
         }
 
         public Builder username(String username) {
@@ -258,6 +272,16 @@ public class User {
 
         public Builder lastAccessAt(LocalDateTime lastAccessAt) {
             this.lastAccessAt = lastAccessAt;
+            return this;
+        }
+
+        public Builder accountLocked(boolean accountLocked) {
+            this.accountLocked = accountLocked;
+            return this;
+        }
+
+        public Builder emailVerified(boolean emailVerified) {
+            this.emailVerified = emailVerified;
             return this;
         }
 

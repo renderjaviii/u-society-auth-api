@@ -12,7 +12,7 @@ import common.authentication.domain.model.User;
 public class CustomUserDetails extends User implements UserDetails {
 
     public CustomUserDetails(User user) {
-        super(user);
+        super(User.newBuilder().role(user.getRole()).accountLocked(user.isAccountLocked()));
     }
 
     @Override

@@ -1,5 +1,9 @@
 package common.authentication.domain.service.common;
 
+import static common.authentication.domain.exception.UserException.USER_NOT_FOUND;
+
+import java.time.Clock;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +17,9 @@ public abstract class CommonServiceImpl implements CommonService {
     private static final String USER_NOT_FOUND_FORMAT = "Username: %s not found.";
 
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
+    @Autowired
+    protected Clock clock;
 
     public CommonServiceImpl() {
         super();
@@ -25,7 +31,8 @@ public abstract class CommonServiceImpl implements CommonService {
 
     public User getUser(String username) throws GenericException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new GenericException(String.format(USER_NOT_FOUND_FORMAT, username), "USER NOT FOUND"));
+                .orElseThrow(
+                        () -> new GenericException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND));
     }
 
 }

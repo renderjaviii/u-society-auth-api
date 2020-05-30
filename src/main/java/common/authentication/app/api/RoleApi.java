@@ -1,40 +1,37 @@
-package common.authentication.domain.model;
+package common.authentication.app.api;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.List;
 
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import io.swagger.annotations.ApiModel;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
+@ApiModel(value = "Role Api")
+@JsonRootName(value = "role")
+public class RoleApi extends GenericApi {
 
-@Entity
-@Table(name = "privilege")
-public class Privilege {
-
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @JsonProperty
     private Integer id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @JsonProperty
     private String name;
 
-    @Column(name = "description")
+    @JsonProperty
     private String description;
 
-    public Privilege() {
+    @JsonProperty
+    private List<PrivilegeApi> privileges;
+
+    public RoleApi() {
         super();
     }
 
-    private Privilege(Builder builder) {
+    private RoleApi(Builder builder) {
         id = builder.id;
         name = builder.name;
         description = builder.description;
+        privileges = builder.privileges;
     }
 
     public Integer getId() {
@@ -61,26 +58,22 @@ public class Privilege {
         this.description = description;
     }
 
+    public List<PrivilegeApi> getPrivileges() {
+        return privileges;
+    }
+
+    public void setPrivileges(List<PrivilegeApi> privileges) {
+        this.privileges = privileges;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Privilege)) {
-            return false;
-        }
-        Privilege that = (Privilege) o;
-        return id.equals(that.id);
+        return super.equals(o);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+        return super.hashCode();
     }
 
     public static Builder newBuilder() {
@@ -92,8 +85,10 @@ public class Privilege {
         private Integer id;
         private String name;
         private String description;
+        private List<PrivilegeApi> privileges;
 
         private Builder() {
+            super();
         }
 
         public Builder id(Integer id) {
@@ -111,8 +106,13 @@ public class Privilege {
             return this;
         }
 
-        public Privilege build() {
-            return new Privilege(this);
+        public Builder privileges(List<PrivilegeApi> privileges) {
+            this.privileges = privileges;
+            return this;
+        }
+
+        public RoleApi build() {
+            return new RoleApi(this);
         }
 
     }
