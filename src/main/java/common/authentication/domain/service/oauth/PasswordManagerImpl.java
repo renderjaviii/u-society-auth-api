@@ -10,6 +10,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import common.authentication.domain.exception.UserException;
 import common.authentication.domain.model.User;
 import common.authentication.domain.repository.UserRepository;
 
@@ -50,6 +51,15 @@ public class PasswordManagerImpl implements PasswordManager {
         userRepository.saveAndFlush(user);
 
         return user;
+    }
+
+    @Override
+    public void validatePassword(User user, String oldPassword, String newPassword) throws UserException {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new UserException("Invalid previous password.");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
 }

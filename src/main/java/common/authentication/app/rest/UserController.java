@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import common.authentication.app.api.ApiError;
 import common.authentication.app.api.UserApi;
+import common.authentication.app.rest.request.ChangePasswordRequest;
 import common.authentication.app.rest.request.CreateUserRequest;
 import common.authentication.domain.exception.GenericException;
 import common.authentication.domain.exception.UserException;
@@ -100,6 +102,18 @@ public class UserController extends CommonController {
     @GetMapping(path = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserApi>> get() {
         return ResponseEntity.ok(userService.getAll());
+    }
+
+    @ApiOperation(value = "Change password.")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "Password changed."),
+            @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
+    @PatchMapping(path = "/{username}/changePassword", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<UserApi>> changePassword(@PathVariable(value = "username") final String username,
+                                                        @Valid @RequestBody ChangePasswordRequest request)
+            throws GenericException {
+        userService.changePassword(username, request);
+        return ResponseEntity.ok().build();
     }
 
 }

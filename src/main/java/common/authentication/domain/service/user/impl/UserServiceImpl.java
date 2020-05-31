@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import common.authentication.app.api.UserApi;
+import common.authentication.app.rest.request.ChangePasswordRequest;
 import common.authentication.app.rest.request.CreateUserRequest;
 import common.authentication.domain.converter.Converter;
 import common.authentication.domain.exception.GenericException;
@@ -100,6 +101,11 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
         return userRepository.findAll().stream()
                 .map(Converter::user)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void changePassword(String username, ChangePasswordRequest request) throws GenericException {
+        passwordManager.validatePassword(getUser(username), request.getOldPassword(), request.getNewPassword());
     }
 
     private void validateUser(CreateUserRequest request) throws UserException {
