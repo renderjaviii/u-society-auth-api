@@ -37,13 +37,13 @@ public class PasswordManagerImpl implements PasswordManager {
     @Override
     public User checkPassword(User user, String rawPassword) {
         if (user.isAccountLocked()) {
-            throw new LockedException("Account locked");
+            throw new LockedException("Account locked.");
         }
         if (!user.isEmailVerified()) {
             throw new DisabledException("Email not verified.");
         }
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new BadCredentialsException("Bad credentials");
+            throw new BadCredentialsException("Bad credentials.");
         }
 
         user.setLastAccessAt(LocalDateTime.now(clock));

@@ -31,7 +31,7 @@ import io.swagger.annotations.ApiResponses;
 
 @Validated
 @RestController
-@RequestMapping(path = "v1/users/")
+@RequestMapping(path = "v1/users")
 public class UserController extends CommonController {
 
     private final UserService userService;
