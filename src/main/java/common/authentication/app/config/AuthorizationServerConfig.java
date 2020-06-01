@@ -24,11 +24,11 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    @Value("${config.access-token.signing-key}")
+    @Value("${config.access-token.signing-key:123}")
     private String signingKey;
-    @Value("${config.access-token.validity-seconds}")
+    @Value("${config.access-token.validity-seconds:43200}")
     private int accessTokenValiditySeconds;
-    @Value("${config.refresh-token.validity-seconds}")
+    @Value("${config.refresh-token.validity-seconds:86400}")
     private int refreshTokenValiditySeconds;
 
     private final ClientDetailsService customClientDetails;
