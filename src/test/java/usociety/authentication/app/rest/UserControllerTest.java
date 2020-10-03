@@ -56,7 +56,6 @@ public class UserControllerTest {
                 .build();
 
         user = UserApi.newBuilder()
-                .documentNumber("documentNumber")
                 .build();
 
         objectMapper = new CustomObjectMapperImpl();
@@ -67,11 +66,9 @@ public class UserControllerTest {
         MvcResult mvcResult = mockMvc.perform(post(BASE_URL + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CreateUserRequest.newBuilder()
-                        .documentNumber("docNumber")
                         .email("email@email.com")
                         .username("username")
                         .password("password")
-                        .userRole("ROLE")
                         .build())))
                 .andExpect(status().isCreated())
                 .andReturn();
@@ -84,10 +81,8 @@ public class UserControllerTest {
         MvcResult mvcResult = mockMvc.perform(post(BASE_URL + "/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(CreateUserRequest.newBuilder()
-                        .documentNumber("docNumber")
                         .email("email@email.com")
                         .password("password")
-                        .userRole("ROLE")
                         .build())))
                 .andExpect(status().isBadRequest())
                 .andReturn();

@@ -1,5 +1,6 @@
 package usociety.authentication.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,8 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String userName);
 
-    Optional<User> findByUsernameOrEmail(String username,
-                                         String email);
+    List<User> findAllByIdOrUsernameOrEmail(Long id, String username, String email);
 
     Optional<User> findByUsernameAndAccountLocked(String username, boolean accountLocked);
 

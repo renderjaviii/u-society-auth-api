@@ -62,23 +62,23 @@ public class UserController extends CommonController {
         return ResponseEntity.ok(userService.get(username));
     }
 
-    @ApiOperation(value = "Get user using filters.")
+    @ApiOperation(value = "Get user by filters.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
-    @GetMapping(path = "/findByFilters", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserApi> get(@RequestParam(value = "documentNumber") final String documentNumber,
-                                       @RequestParam(value = "phoneNumber") final String phoneNumber,
-                                       @RequestParam(value = "username") final String username,
-                                       @RequestParam(value = "email") final String email) throws UserException {
-        return ResponseEntity.ok(userService.get(username, documentNumber, email, phoneNumber));
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserApi> get(@RequestParam(value = "id", required = false) final Long id,
+                                       @RequestParam(value = "username", required = false) final String username,
+                                       @RequestParam(value = "email", required = false) final String email)
+            throws UserException {
+        return ResponseEntity.ok(userService.get(id, username, email));
     }
 
     @ApiOperation(value = "Verify email.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
-    @PostMapping(path = "/{username}/verifyEmail", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{username}/verify-email", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> verifyEmail(@PathVariable(value = "username") final String username)
             throws GenericException {
         userService.enableAccount(username);
@@ -99,7 +99,7 @@ public class UserController extends CommonController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Users data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
-    @GetMapping(path = "/getAll", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserApi>> get() {
         return ResponseEntity.ok(userService.getAll());
     }
@@ -108,7 +108,7 @@ public class UserController extends CommonController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Password changed."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
-    @PatchMapping(path = "/{username}/changePassword", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PatchMapping(path = "/{username}/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserApi>> changePassword(@PathVariable(value = "username") final String username,
                                                         @Valid @RequestBody ChangePasswordRequest request)
             throws GenericException {

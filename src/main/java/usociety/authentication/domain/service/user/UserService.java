@@ -14,7 +14,7 @@ public interface UserService {
 
     UserApi get(String username) throws UserException;
 
-    UserApi get(String username, String documentNumber, String email, String phoneNumber) throws UserException;
+    UserApi get(Long id, String username, String email) throws UserException;
 
     void enableAccount(String username) throws GenericException;
 
