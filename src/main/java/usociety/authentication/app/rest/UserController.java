@@ -46,6 +46,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Create user.")
     @ApiResponses(value = { @ApiResponse(code = 201, message = "User created."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserApi> create(@Valid @RequestBody final CreateUserRequest request) throws UserException {
@@ -55,6 +57,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Get user by username.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @GetMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserApi> getByUsername(@PathVariable(value = "username") final String username)
@@ -65,6 +69,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Get user by filters.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserApi> get(@RequestParam(value = "id", required = false) final Long id,
@@ -77,6 +83,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Verify email.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @PostMapping(path = "/{username}/verify-email", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> verifyEmail(@PathVariable(value = "username") final String username)
@@ -88,6 +96,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Delete user.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User deleted."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @DeleteMapping(path = "/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> delete(@PathVariable(value = "username") final String username) throws UserException {
@@ -98,6 +108,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Get all users.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Users data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @GetMapping(path = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserApi>> get() {
@@ -107,6 +119,8 @@ public class UserController extends CommonController {
     @ApiOperation(value = "Change password.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Password changed."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
             @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
     @PatchMapping(path = "/{username}/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserApi>> changePassword(@PathVariable(value = "username") final String username,
