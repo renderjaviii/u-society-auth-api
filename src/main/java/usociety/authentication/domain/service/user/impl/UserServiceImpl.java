@@ -8,6 +8,7 @@ import static usociety.authentication.domain.exception.UserException.USER_NOT_FO
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -60,6 +61,18 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
                 .role(roleRepository.findByName(ROLE_BASIC_NAME))
                 .build());
         return Converter.user(savedUser);
+    }
+
+    @Override
+    public void update(UserApi request) throws UserException {
+        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
+        if (!optionalUser.isPresent()) {
+            throw new UserException("User not found.");
+        }
+        User user = optionalUser.get();
+        user.setPhoto(request.getPhoto());
+        user.setName(request.getName());
+        userRepository.save(user);
     }
 
     @Override

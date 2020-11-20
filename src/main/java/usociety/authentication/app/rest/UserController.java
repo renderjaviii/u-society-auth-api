@@ -43,7 +43,7 @@ public class UserController extends CommonController {
         this.userService = userService;
     }
 
-    @ApiOperation(value = "Create user.")
+    @ApiOperation(value = "Create.")
     @ApiResponses(value = { @ApiResponse(code = 201, message = "User created."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
@@ -93,7 +93,19 @@ public class UserController extends CommonController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "Delete user.")
+    @ApiOperation(value = "Update.")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "User updated."),
+            @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
+            @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
+            @ApiResponse(code = 409, message = "Internal validation error.", response = ApiError.class),
+            @ApiResponse(code = 500, message = "Internal server error.", response = ApiError.class) })
+    @PatchMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> update(@Valid @RequestBody final UserApi request) throws UserException {
+        userService.update(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "Delete.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User deleted."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
@@ -105,7 +117,7 @@ public class UserController extends CommonController {
         return ResponseEntity.ok().build();
     }
 
-    @ApiOperation(value = "Get all users.")
+    @ApiOperation(value = "Get all.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Users data."),
             @ApiResponse(code = 400, message = "Input data error.", response = ApiError.class),
             @ApiResponse(code = 401, message = "Unauthorized.", response = ApiError.class),
