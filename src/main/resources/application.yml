@@ -28,7 +28,7 @@ config:
 spring:
   profiles: dev, prod
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:${PROJECT_DATABASE_PORT}/${PROJECT_DATABASE_NAME}?zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=${SERVER_TIME_ZONE}
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${PROJECT_DATABASE_PORT}/${PROJECT_DATABASE_NAME}?zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=${SERVER_TIME_ZONE}
     username: ${PROJECT_DATABASE_USER}
     password: ${PROJECT_DATABASE_PASSWORD}
     platform: mysql
