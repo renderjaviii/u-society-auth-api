@@ -11,6 +11,7 @@ import java.time.Clock;
 import java.util.Optional;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -45,6 +46,7 @@ public class UserServiceImplTest {
         ReflectionTestUtils.setField(subject, "clock", clock);
     }
 
+    @Ignore
     @Test
     public void shouldGetUserUsingTheCorrectData() throws UserException {
         when(userRepository.findByUsernameAndAccountLocked(any(), anyBoolean()))
