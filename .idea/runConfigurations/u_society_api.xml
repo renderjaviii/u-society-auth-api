@@ -11,7 +11,7 @@
       <option name="IS_ENABLE_EXPERIMENTAL_INTEGRATIONS" value="false" />
       <ENTRIES>
         <ENTRY IS_ENABLED="true" PARSER="runconfig" />
-        <ENTRY IS_ENABLED="true" PARSER="env" PATH="$PROJECT_DIR$/../u-society-api/src/main/resources/cloud.env" />
+        <ENTRY IS_ENABLED="true" PARSER="env" PATH="$PROJECT_DIR$/../u-society-api/src/main/resources/development.env" />
       </ENTRIES>
     </extension>
     <method v="2">
