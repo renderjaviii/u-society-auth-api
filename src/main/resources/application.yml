@@ -33,6 +33,8 @@ spring:
     password: ${PROJECT_DATABASE_PASSWORD}
     platform: mysql
     initialization-mode: never
+    hikari:
+      maximum-pool-size: 10
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
