@@ -34,7 +34,8 @@ spring:
     platform: mysql
     initialization-mode: never
     hikari:
-      maximum-pool-size: 10
+      maximum-pool-size: 1000
+      validation-timeout: 100000
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
