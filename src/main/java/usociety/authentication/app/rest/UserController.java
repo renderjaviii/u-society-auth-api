@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -31,6 +32,7 @@ import usociety.authentication.domain.exception.GenericException;
 import usociety.authentication.domain.exception.UserException;
 import usociety.authentication.domain.service.user.UserService;
 
+@CrossOrigin(origins = "*", maxAge = 86400)
 @Validated
 @RestController
 @RequestMapping(path = "v1/users")
