@@ -1,0 +1,15 @@
+version: '2'
+services:
+  u-society-auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: u-society/authentication:latest
+    entrypoint: ["java","-jar","/app.jar"]
+    env_file:
+      - ./src/main/resources/cloud.env
+    expose:
+      - 8075
+    ports:
+      - 8075:8075
