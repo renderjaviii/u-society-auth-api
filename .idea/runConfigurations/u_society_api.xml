@@ -3,6 +3,7 @@
     <output_file path="$PROJECT_DIR$/.." />
     <option name="MAIN_CLASS_NAME" value="usociety.manager.Application" />
     <module name="manager" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../u-society-api" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="true" />
       <option name="IS_SUBST" value="false" />
