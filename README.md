@@ -30,6 +30,7 @@ This RESTful microservice has the function of the Authorization server, it’s t
 - Model mapper.
 - Jackson databind.
 - Apache commons lang3.
+- JUnit 4 + Mockito.
 
 
 #### Additional considerations
