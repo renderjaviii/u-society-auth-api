@@ -11,12 +11,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "credential")
+@Table(name = "credentials")
 public class Credential {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "username")
@@ -34,14 +34,18 @@ public class Credential {
     @Column(name = "grant_type", nullable = false)
     private String grantTypes;
 
-    @Column(name = "credentials_expired", nullable = false, insertable = false,
-            columnDefinition = "boolean default false")
+    @Column(
+            name = "credentials_expired",
+            nullable = false,
+            insertable = false,
+            columnDefinition = "BOOLEAN DEFAULT FALSE"
+    )
     private Boolean credentialsExpired;
 
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 100)
     private String description;
 
     public Credential() {
