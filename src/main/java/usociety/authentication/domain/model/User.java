@@ -18,12 +18,12 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -35,7 +35,7 @@ public class User {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "photo", nullable = true)
+    @Column(name = "photo")
     private String photo;
 
     @Column(name = "password", nullable = false)
@@ -44,17 +44,17 @@ public class User {
     @Column(name = "created_at", nullable = false, columnDefinition = "DATE")
     private LocalDate createdAt;
 
-    @Column(name = "last_access_at", columnDefinition = "DATETIME")
+    @Column(name = "last_access_at")
     private LocalDateTime lastAccessAt;
 
-    @Column(name = "account_locked", nullable = false, insertable = false, columnDefinition = "boolean default false")
+    @Column(name = "account_locked", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean accountLocked;
 
-    @Column(name = "email_verified", nullable = false, insertable = false, columnDefinition = "boolean default true")
+    @Column(name = "email_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
     private boolean emailVerified;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "role_id", referencedColumnName = "id")
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
 
     public User() {
