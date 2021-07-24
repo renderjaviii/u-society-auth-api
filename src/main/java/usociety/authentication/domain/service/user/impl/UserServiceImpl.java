@@ -53,18 +53,19 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
 
         User savedUser = userRepository.save(User.newBuilder()
                 .password(passwordManager.encode(request.getPassword()))
+                .role(roleRepository.findByName(ROLE_BASIC_NAME))
                 .createdAt(LocalDate.now(clock))
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .photo(request.getPhoto())
                 .name(request.getName())
-                .role(roleRepository.findByName(ROLE_BASIC_NAME))
+                .emailVerified(TRUE)
                 .build());
         return Converter.user(savedUser);
     }
 
     @Override
-    public void update(UserApi request) throws UserException {
+    public UserApi update(UserApi request) throws UserException {
         Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
         if (!optionalUser.isPresent()) {
             throw new UserException("User not found.");
@@ -72,12 +73,12 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
         User user = optionalUser.get();
         user.setPhoto(request.getPhoto());
         user.setName(request.getName());
-        userRepository.save(user);
+        return Converter.user(userRepository.save(user));
     }
 
     @Override
     public UserApi get(String username) throws UserException {
-        return Converter.user(userRepository.findByUsernameAndAccountLocked(username, FALSE)
+        return Converter.user(userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND)));
     }
 

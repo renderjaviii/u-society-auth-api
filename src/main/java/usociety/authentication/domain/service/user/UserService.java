@@ -12,7 +12,7 @@ public interface UserService {
 
     UserApi create(CreateUserRequest request) throws UserException;
 
-    void update(UserApi request) throws UserException;
+    UserApi update(UserApi request) throws UserException;
 
     UserApi get(String username) throws UserException;
 
