@@ -34,6 +34,7 @@ public class UserFixture {
     public static User value() {
         return User.newBuilder()
                 .lastAccessAt(lastAccessAt)
+                .createdAt(createdAt)
                 .name(firstName)
                 .photo(url)
                 .username(username)

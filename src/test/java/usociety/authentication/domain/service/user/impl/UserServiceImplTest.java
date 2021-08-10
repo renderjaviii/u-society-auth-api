@@ -1,9 +1,7 @@
 package usociety.authentication.domain.service.user.impl;
 
-import static java.lang.Boolean.FALSE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,7 +9,6 @@ import java.time.Clock;
 import java.util.Optional;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -46,15 +43,14 @@ public class UserServiceImplTest {
         ReflectionTestUtils.setField(subject, "clock", clock);
     }
 
-    @Ignore
     @Test
     public void shouldGetUserUsingTheCorrectData() throws UserException {
-        when(userRepository.findByUsernameAndAccountLocked(any(), anyBoolean()))
-                .thenReturn(Optional.of(UserFixture.value()));
+        when(userRepository.findByUsername(any())).thenReturn(Optional.of(UserFixture.value()));
 
         UserApi executed = subject.get(USERNAME);
+
         assertEquals(UserApiFixture.value(), executed);
-        verify(userRepository).findByUsernameAndAccountLocked(USERNAME, FALSE);
+        verify(userRepository).findByUsername(USERNAME);
     }
 
 }

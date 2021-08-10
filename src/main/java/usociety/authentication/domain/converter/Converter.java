@@ -1,34 +1,84 @@
 package usociety.authentication.domain.converter;
 
-import static java.lang.Boolean.TRUE;
+import java.util.stream.Collectors;
 
-import org.modelmapper.ModelMapper;
-import org.modelmapper.config.Configuration;
-
+import usociety.authentication.app.api.PrivilegeApi;
+import usociety.authentication.app.api.RoleApi;
 import usociety.authentication.app.api.UserApi;
+import usociety.authentication.domain.model.Privilege;
+import usociety.authentication.domain.model.Role;
 import usociety.authentication.domain.model.User;
 
 public class Converter {
-
-    private static final ModelMapper modelMapper;
 
     private Converter() {
         super();
     }
 
-    static {
-        modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-                .setFieldMatchingEnabled(TRUE);
+    public static UserApi user(User user) {
+        return UserApi.newBuilder()
+                .lastAccessAt(user.getLastAccessAt())
+                .createdAt(user.getCreatedAt())
+                .role(convert(user.getRole()))
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .photo(user.getPhoto())
+                .name(user.getName())
+                .id(user.getId())
+                .build();
     }
 
-    public static UserApi user(User user) {
-        return modelMapper.map(user, UserApi.class);
+    private static RoleApi convert(Role role) {
+        return RoleApi.newBuilder()
+                .description(role.getDescription())
+                .name(role.getName())
+                .id(role.getId())
+                .privileges(role.getPrivileges()
+                        .stream()
+                        .map(Converter::convert)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private static PrivilegeApi convert(Privilege privilege) {
+        return PrivilegeApi.newBuilder()
+                .description(privilege.getDescription())
+                .name(privilege.getName())
+                .id(privilege.getId())
+                .build();
     }
 
     public static User user(UserApi user) {
-        return modelMapper.map(user, User.class);
+        return User.newBuilder()
+                .lastAccessAt(user.getLastAccessAt())
+                .createdAt(user.getCreatedAt())
+                .role(convert(user.getRole()))
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .photo(user.getPhoto())
+                .name(user.getName())
+                .id(user.getId())
+                .build();
+    }
+
+    private static Role convert(RoleApi role) {
+        return Role.newBuilder()
+                .description(role.getDescription())
+                .name(role.getName())
+                .id(role.getId())
+                .privileges(role.getPrivileges()
+                        .stream()
+                        .map(Converter::convert)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private static Privilege convert(PrivilegeApi privilege) {
+        return Privilege.newBuilder()
+                .description(privilege.getDescription())
+                .name(privilege.getName())
+                .id(privilege.getId())
+                .build();
     }
 
 }

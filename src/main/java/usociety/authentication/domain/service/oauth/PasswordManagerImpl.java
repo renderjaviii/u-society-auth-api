@@ -22,9 +22,7 @@ public class PasswordManagerImpl implements PasswordManager {
     private final Clock clock;
 
     @Autowired
-    public PasswordManagerImpl(PasswordEncoder passwordEncoder,
-                               UserRepository userRepository,
-                               Clock clock) {
+    public PasswordManagerImpl(PasswordEncoder passwordEncoder, UserRepository userRepository, Clock clock) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.clock = clock;
@@ -38,28 +36,30 @@ public class PasswordManagerImpl implements PasswordManager {
     @Override
     public User checkPassword(User user, String rawPassword) {
         if (user.isAccountLocked()) {
-            throw new LockedException("Account locked.");
+            throw new LockedException("Account locked");
         }
         if (!user.isEmailVerified()) {
-            throw new DisabledException("Email not verified.");
+            throw new DisabledException("Email not verified");
         }
         if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
-            throw new BadCredentialsException("Bad credentials.");
+            throw new BadCredentialsException("Bad credentials");
         }
 
         user.setLastAccessAt(LocalDateTime.now(clock));
-        userRepository.saveAndFlush(user);
-
-        return user;
+        return userRepository.saveAndFlush(user);
     }
 
     @Override
-    public void validatePassword(User user, String oldPassword, String newPassword) throws UserException {
+    public String validatePassword(User user, String oldPassword, String newPassword) throws UserException {
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new UserException("Invalid previous password.");
+            throw new UserException("Invalid old password");
         }
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.save(user);
+        String encodedNewPassword = encode(newPassword);
+        if (oldPassword.equals(encodedNewPassword)) {
+            throw new UserException("New password must be different");
+        }
+
+        return encodedNewPassword;
     }
 
 }

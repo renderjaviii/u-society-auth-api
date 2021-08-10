@@ -8,7 +8,7 @@ import static usociety.authentication.domain.exception.UserException.USER_NOT_FO
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -34,7 +34,7 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
     private static final String USER_ALREADY_EXISTS_FORMAT = "Username: %s already registered.";
     private static final String EMAIL_ALREADY_IN_USE_FORMAT = "Email: %s is already in use.";
     private static final String USER_NOT_FOUND_FORMAT = "User with username: %s not found.";
-    private static final String ROLE_BASIC_NAME = "ROLE_BASIC";
+    private static final String BASIC_ROLE_NAME = "ROLE_BASIC";
 
     private final PasswordManager passwordManager;
     private final RoleRepository roleRepository;
@@ -50,35 +50,33 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public UserApi create(CreateUserRequest request) throws UserException {
         validateUser(request);
-
-        User savedUser = userRepository.save(User.newBuilder()
+        return Converter.user(userRepository.save(User.newBuilder()
                 .password(passwordManager.encode(request.getPassword()))
+                .role(roleRepository.findByName(BASIC_ROLE_NAME))
                 .createdAt(LocalDate.now(clock))
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .photo(request.getPhoto())
                 .name(request.getName())
-                .role(roleRepository.findByName(ROLE_BASIC_NAME))
-                .build());
-        return Converter.user(savedUser);
+                .emailVerified(TRUE)
+                .build()));
     }
 
     @Override
-    public void update(UserApi request) throws UserException {
-        Optional<User> optionalUser = userRepository.findByUsername(request.getUsername());
-        if (!optionalUser.isPresent()) {
-            throw new UserException("User not found.");
-        }
-        User user = optionalUser.get();
+    public UserApi update(UserApi request) throws UserException {
+        String username = request.getUsername();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(userNotExistsSupplier(username));
+
         user.setPhoto(request.getPhoto());
         user.setName(request.getName());
-        userRepository.save(user);
+        return Converter.user(userRepository.save(user));
     }
 
     @Override
     public UserApi get(String username) throws UserException {
-        return Converter.user(userRepository.findByUsernameAndAccountLocked(username, FALSE)
-                .orElseThrow(() -> new UserException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND)));
+        return Converter.user(userRepository.findByUsername(username)
+                .orElseThrow(userNotExistsSupplier(username)));
     }
 
     @Override
@@ -86,10 +84,10 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
         List<User> users = userRepository.findAllByIdOrUsernameOrEmail(id, username, email);
 
         if (users.isEmpty()) {
-            throw new UserException("No user match using these filters.", USER_NOT_FOUND);
+            throw new UserException("No user matches using these filters", USER_NOT_FOUND);
         }
         if (users.size() > 1) {
-            throw new UserException("Multiple users match using these filters.", USER_NOT_FOUND);
+            throw new UserException("Multiple users match using these filters", USER_NOT_FOUND);
         }
         return Converter.user(users.stream().findFirst().orElse(null));
     }
@@ -104,7 +102,7 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
     @Override
     public void delete(String username) throws UserException {
         User user = userRepository.findByUsernameAndAccountLocked(username, FALSE)
-                .orElseThrow(() -> new UserException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND));
+                .orElseThrow(userNotExistsSupplier(username));
         user.setAccountLocked(TRUE);
         userRepository.save(user);
     }
@@ -118,18 +116,25 @@ public class UserServiceImpl extends CommonServiceImpl implements UserService {
 
     @Override
     public void changePassword(String username, ChangePasswordRequest request) throws GenericException {
-        passwordManager.validatePassword(getUser(username), request.getOldPassword(), request.getNewPassword());
+        User user = getUser(username);
+        String newPassword = passwordManager.validatePassword(user, request.getOldPassword(), request.getNewPassword());
+        user.setPassword(newPassword);
+        userRepository.save(user);
     }
 
     private void validateUser(CreateUserRequest request) throws UserException {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new UserException(String.format(USER_ALREADY_EXISTS_FORMAT, request.getUsername()),
-                    USER_ALREADY_EXISTS);
+            String errorMessage = String.format(USER_ALREADY_EXISTS_FORMAT, request.getUsername());
+            throw new UserException(errorMessage, USER_ALREADY_EXISTS);
         }
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new UserException(String.format(EMAIL_ALREADY_IN_USE_FORMAT, request.getEmail()),
-                    EMAIL_ALREADY_IN_USE);
+            String errorMessage = String.format(EMAIL_ALREADY_IN_USE_FORMAT, request.getEmail());
+            throw new UserException(errorMessage, EMAIL_ALREADY_IN_USE);
         }
+    }
+
+    private Supplier<UserException> userNotExistsSupplier(String username) {
+        return () -> new UserException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND);
     }
 
 }

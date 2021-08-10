@@ -18,10 +18,11 @@ public abstract class CommonServiceImpl implements CommonService {
 
     @Autowired
     protected UserRepository userRepository;
+
     @Autowired
     protected Clock clock;
 
-    public CommonServiceImpl() {
+    protected CommonServiceImpl() {
         super();
     }
 
@@ -31,8 +32,10 @@ public abstract class CommonServiceImpl implements CommonService {
 
     public User getUser(String username) throws GenericException {
         return userRepository.findByUsername(username)
-                .orElseThrow(
-                        () -> new GenericException(String.format(USER_NOT_FOUND_FORMAT, username), USER_NOT_FOUND));
+                .orElseThrow(() -> {
+                    String errorMessage = String.format(USER_NOT_FOUND_FORMAT, username);
+                    return new GenericException(errorMessage, USER_NOT_FOUND);
+                });
     }
 
 }

@@ -9,6 +9,6 @@ public interface PasswordManager {
 
     User checkPassword(User user, String rawPassword);
 
-    void validatePassword(User user, String oldPassword, String newPassword) throws UserException;
+    String validatePassword(User user, String oldPassword, String newPassword) throws UserException;
 
 }

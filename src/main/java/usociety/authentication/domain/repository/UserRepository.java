@@ -11,11 +11,11 @@ import usociety.authentication.domain.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByUsername(String userName);
+    Optional<User> findByUsernameAndAccountLocked(String username, boolean accountLocked);
 
     List<User> findAllByIdOrUsernameOrEmail(Long id, String username, String email);
 
-    Optional<User> findByUsernameAndAccountLocked(String username, boolean accountLocked);
+    Optional<User> findByUsername(String userName);
 
     Optional<User> findByEmail(String email);
 
