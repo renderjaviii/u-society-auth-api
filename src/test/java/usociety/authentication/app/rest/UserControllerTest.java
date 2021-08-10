@@ -19,18 +19,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import usociety.authentication.app.api.ApiError;
 import usociety.authentication.app.api.UserApi;
-import usociety.authentication.app.handler.RestExceptionHandler;
+import usociety.authentication.app.handler.GlobalControllerExceptionHandler;
 import usociety.authentication.app.rest.request.CreateUserRequest;
 import usociety.authentication.domain.exception.UserException;
 import usociety.authentication.domain.service.user.UserService;
 import usociety.authentication.domain.util.mapper.CustomObjectMapper;
 import usociety.authentication.domain.util.mapper.impl.CustomObjectMapperImpl;
 
-@EnableWebMvc
 @SpringBootTest
 @RunWith(MockitoJUnitRunner.class)
 public class UserControllerTest {
@@ -52,7 +50,7 @@ public class UserControllerTest {
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(subject)
-                .setControllerAdvice(new RestExceptionHandler())
+                .setControllerAdvice(new GlobalControllerExceptionHandler())
                 .build();
 
         user = UserApi.newBuilder()

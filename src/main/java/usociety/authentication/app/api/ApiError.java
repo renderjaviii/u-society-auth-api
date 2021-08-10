@@ -10,6 +10,7 @@ public class ApiError extends BaseObject {
 
     @JsonProperty
     private String description;
+
     @JsonProperty
     private String statusCode;
 

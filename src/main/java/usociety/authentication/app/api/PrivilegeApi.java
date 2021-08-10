@@ -1,13 +1,11 @@
 package usociety.authentication.app.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import io.swagger.annotations.ApiModel;
 import usociety.authentication.app.util.BaseObject;
 
 @ApiModel(value = "Privilege Api")
-@JsonRootName(value = "privilege")
 public class PrivilegeApi extends BaseObject {
 
     @JsonProperty

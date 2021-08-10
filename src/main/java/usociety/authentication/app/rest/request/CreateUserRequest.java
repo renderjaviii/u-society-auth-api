@@ -8,9 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import usociety.authentication.app.util.validator.CreateUserRequestConstraint;
 
-@CreateUserRequestConstraint
 @ApiModel(value = "Request to create user")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateUserRequest {

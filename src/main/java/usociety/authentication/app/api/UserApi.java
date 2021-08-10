@@ -4,13 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import io.swagger.annotations.ApiModel;
 import usociety.authentication.app.util.BaseObject;
 
 @ApiModel(value = "User Api")
-@JsonRootName(value = "user")
 public class UserApi extends BaseObject {
 
     @JsonProperty

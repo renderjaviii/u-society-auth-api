@@ -13,7 +13,7 @@ import usociety.authentication.domain.repository.CredentialRepository;
 @Service
 public class CustomClientDetailsService implements ClientDetailsService {
 
-    private static final String ERROR_MESSAGE_FORMAT = "The client id %s is not valid.";
+    private static final String ERROR_MESSAGE_FORMAT = "The client id: %s is not valid.";
 
     private final CredentialRepository credentialRepository;
 

@@ -1,8 +1,8 @@
 package usociety.authentication.domain.service.oauth;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -14,7 +14,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import usociety.authentication.domain.model.Privilege;
 import usociety.authentication.domain.model.User;
 import usociety.authentication.domain.repository.UserRepository;
 
@@ -25,10 +24,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private final PasswordManager passwordManager;
 
     @Autowired
-    public CustomAuthenticationProvider(UserRepository userRepository,
-                                        @Lazy PasswordManager passwordManager) {
-        this.userRepository = userRepository;
+    public CustomAuthenticationProvider(@Lazy PasswordManager passwordManager,
+                                        UserRepository userRepository) {
         this.passwordManager = passwordManager;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -38,7 +37,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         Optional<User> optionalUser = userRepository.findByUsername(userName);
         if (!optionalUser.isPresent()) {
-            throw new UsernameNotFoundException("Authentication failed.");
+            throw new UsernameNotFoundException("Authentication failed");
         }
 
         User user = passwordManager.checkPassword(optionalUser.get(), password);
@@ -49,11 +48,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     }
 
     private List<GrantedAuthority> getAuthorities(User user) {
-        List<GrantedAuthority> authorities = new LinkedList<>();
-        for (Privilege privilege : user.getRole().getPrivileges()) {
-            authorities.add(new SimpleGrantedAuthority(privilege.getName()));
-        }
-        return authorities;
+        return user.getRole()
+                .getPrivileges()
+                .stream()
+                .map(privilege -> new SimpleGrantedAuthority(privilege.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

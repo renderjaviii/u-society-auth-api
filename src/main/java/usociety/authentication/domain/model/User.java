@@ -32,7 +32,7 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
     @Column(name = "photo")
@@ -48,10 +48,10 @@ public class User {
     private LocalDateTime lastAccessAt;
 
     @Column(name = "account_locked", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
-    private boolean accountLocked;
+    private Boolean accountLocked;
 
     @Column(name = "email_verified", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-    private boolean emailVerified;
+    private Boolean emailVerified;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
@@ -131,10 +131,6 @@ public class User {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public String getName() {
         return name;
     }
@@ -183,8 +179,8 @@ public class User {
         private String photo;
         private LocalDate createdAt;
         private LocalDateTime lastAccessAt;
-        private boolean accountLocked;
-        private boolean emailVerified;
+        private Boolean accountLocked;
+        private Boolean emailVerified;
         private Role role;
 
         private Builder() {
@@ -231,12 +227,12 @@ public class User {
             return this;
         }
 
-        public Builder accountLocked(boolean accountLocked) {
+        public Builder accountLocked(Boolean accountLocked) {
             this.accountLocked = accountLocked;
             return this;
         }
 
-        public Builder emailVerified(boolean emailVerified) {
+        public Builder emailVerified(Boolean emailVerified) {
             this.emailVerified = emailVerified;
             return this;
         }

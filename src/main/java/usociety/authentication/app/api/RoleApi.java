@@ -3,13 +3,11 @@ package usociety.authentication.app.api;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
 
 import io.swagger.annotations.ApiModel;
 import usociety.authentication.app.util.BaseObject;
 
 @ApiModel(value = "Role Api")
-@JsonRootName(value = "role")
 public class RoleApi extends BaseObject {
 
     @JsonProperty
