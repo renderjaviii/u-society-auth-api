@@ -307,6 +307,5 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-.idea
-
-!.idea
+mvnw
+*.cmd
